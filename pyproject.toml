@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "absensi-py"
+version = "0.1.0"
+description = ""
+authors = ["addthoriq1304 <thoriq@qti.co.id>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.111.1"
+sqlalchemy = "^2.0.31"
+pytest = "^8.3.1"
+ruff = "^0.5.4"
+alembic = "^1.13.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
