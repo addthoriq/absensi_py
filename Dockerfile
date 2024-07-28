@@ -12,5 +12,5 @@ COPY pyproject.toml ./
 COPY poetry.lock ./
 COPY . .
 RUN poetry install
-RUN poetry run alembic upgrade head
 EXPOSE 8000
+RUN poetry run alembic upgrade head

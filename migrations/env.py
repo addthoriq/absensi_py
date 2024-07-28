@@ -14,10 +14,10 @@ from settings import (
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-user = DB_USER,
-password = DB_PASSWORD,
-port = DB_PORT,
-host = DB_HOST,
+user = DB_USER
+password = DB_PASSWORD
+port = DB_PORT
+host = DB_HOST
 database = DB_NAME
 config.set_main_option(
     "sqlalchemy.url",

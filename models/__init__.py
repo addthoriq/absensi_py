@@ -20,7 +20,7 @@ database = DB_NAME
 # https://docs.sqlalchemy.org/en/14/orm/session_basics.html#using-a-sessionmaker
 # Create sync session
 engine = create_engine(
-	f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}",
+	f"postgresql+psycopg2cffi://{user}:{password}@{host}:{port}/{database}",
 	pool_size=100,
 	max_overflow=0,
 	pool_timeout=300
