@@ -12,6 +12,7 @@ sqlalchemy = "^2.0.31"
 pytest = "^8.3.1"
 ruff = "^0.5.4"
 alembic = "^1.13.2"
+psycopg2cffi = "^2.9.0"
 
 
 [build-system]
