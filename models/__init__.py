@@ -41,7 +41,7 @@ def get_db_sync():
 # asyncpg currently not working on PyPy
 # Create async session
 async_engine = create_async_engine(
-	f"postgresql+psycopg://{user}:{password}@{host}:{port}/{database}"
+	f"postgresql+psycopg2cffi://{user}:{password}@{host}:{port}/{database}"
 )
 Async_Session = sessionmaker(async_engine, class_=AsyncSession)
 

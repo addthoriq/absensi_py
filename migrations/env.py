@@ -1,5 +1,5 @@
 from logging.config import fileConfig
-
+from models import Base
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from alembic import context
@@ -21,7 +21,7 @@ host = DB_HOST,
 database = DB_NAME
 config.set_main_option(
     "sqlalchemy.url",
-    f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}"
+    f"postgresql+psycopg2cffi://{user}:{password}@{host}:{port}/{database}"
 )
 
 # Interpret the config file for Python logging.

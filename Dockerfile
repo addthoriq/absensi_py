@@ -10,7 +10,7 @@ ENV PATH="${PATH}:/root/.local/bin"
 RUN poetry config virtualenvs.in-project true
 COPY pyproject.toml ./
 COPY poetry.lock ./
-
-RUN poetry install
 COPY . .
+RUN poetry install
+RUN poetry run alembic upgrade head
 EXPOSE 8000
