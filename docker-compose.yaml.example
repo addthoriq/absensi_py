@@ -5,41 +5,23 @@ services:
       context: .
       dockerfile: Dockerfile
     depends_on:
-      - migration
+      - pgsql
     links:
-      - db
+      - pgsql
     ports:
       - "8000:8000"
-    volumes:
-      - .:/app
-      - /app/.venv
-    command: ["poetry", "run", "uvicorn", "--host", "0.0.0.0", "--port", "8000", "main:app", "--reload"]
-
-  migration:
-    build: .
-    command: ["poetry", "run", "alembic", "upgrade", "head"]
-    volumes:
-      - .:/app
-      - /app/.venv
-    links:
-      - db
-    depends_on:
-      - db
 
   pgsql:
     image: postgres
     ports:
-      - 5432:5432
+      - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=123
       - POSTGRES_USER=postgres
       - POSTGRES_DB=db_absensi
       - POSTGRES_HOST_AUTH_METHOD=trust
-    restart: always
-    expose:
-      - 5432
     volumes:
-      - db:/var/lib/postgresql/data
+      - pgsql_data:/var/lib/postgresql/data
 
 volumes:
-  pgsql:
+  pgsql_data:
