@@ -9,7 +9,7 @@ WORKDIR /usr/src/app
 
 RUN apt-get update && apt install -y curl
 RUN curl -sSL https://install.python-poetry.org | python3 -
-ENV PATH="${HOME}/.local/bin:${PATH}"
+ENV PATH="$PATH:/root/.local/bin"
 RUN poetry config virtualenvs.in-project true
 
 COPY pyproject.toml ./
