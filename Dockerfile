@@ -13,4 +13,3 @@ COPY poetry.lock ./
 COPY . .
 RUN poetry install
 EXPOSE 8000
-RUN poetry run alembic upgrade head

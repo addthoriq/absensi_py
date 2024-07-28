@@ -1,8 +1,13 @@
 services:
   fastapi:
+    env_file: ".env"
     build:
       context: .
       dockerfile: Dockerfile
+    depends_on:
+      - migration
+    links:
+      - db
     ports:
       - "8000:8000"
     volumes:
@@ -10,11 +15,31 @@ services:
       - /app/.venv
     command: ["poetry", "run", "uvicorn", "--host", "0.0.0.0", "--port", "8000", "main:app", "--reload"]
 
-  db:
+  migration:
+    build: .
+    command: ["poetry", "run", "alembic", "upgrade", "head"]
+    volumes:
+      - .:/app
+      - /app/.venv
+    links:
+      - db
+    depends_on:
+      - db
+
+  pgsql:
     image: postgres
     ports:
-      - "6432:5432"
+      - 5432:5432
     environment:
       - POSTGRES_PASSWORD=123
       - POSTGRES_USER=postgres
       - POSTGRES_DB=db_absensi
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    restart: always
+    expose:
+      - 5432
+    volumes:
+      - db:/var/lib/postgresql/data
+
+volumes:
+  pgsql:
