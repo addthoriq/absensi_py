@@ -1,5 +1,5 @@
 from models import Base
-from sqlalchemy import Column, Integer, String, VARCHAR, Boolean
+from sqlalchemy import Column, Integer, String, VARCHAR
 
 class User(Base):
 	__tablename__ = "users"
@@ -8,5 +8,3 @@ class User(Base):
 	email = Column("email", VARCHAR(30), nullable=False)
 	nama = Column("nama", String(50), nullable=False)
 	password = Column("password", String(255), nullable=False)
-	is_teacher = Column("is_teacher", Boolean, nullable=False)
-	is_superadmin = Column("is_superadmin", Boolean, nullable=False)
