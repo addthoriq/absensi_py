@@ -45,4 +45,8 @@ Async_Session = sessionmaker(async_engine, class_=AsyncSession)
 Base = declarative_base()
 
 # for alembic automigrations
-from models.User import User
+from .User import User #NoQA
+from .Role import Role #NoQA
+from .Shift import Shift #NoQA
+from .Kehadiran import Kehadiran #NoQA
+from .Absensi import Absensi #NoQA
