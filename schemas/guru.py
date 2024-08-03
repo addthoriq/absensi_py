@@ -6,4 +6,4 @@ class PaginateGuruResponse(BaseModel):
     page_size: int
     page: int
     
-    class DetailGuruResponse(BaseModel)
+    # class DetailGuruResponse(BaseModel)

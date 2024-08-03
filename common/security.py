@@ -7,8 +7,7 @@ from sqlalchemy.orm import Session as SqlAlchemySession
 from models import Session
 from models.User import User
 from settings import (
-JWT_PREFIX,
-SECRET_KEY,
-ALGORITHM,
-
+    JWT_PREFIX,
+    SECRET_KEY,
+    ALGORITHM,
 )

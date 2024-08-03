@@ -3,13 +3,7 @@ from models import Base
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from alembic import context
-from settings import (
-    DB_HOST,
-    DB_NAME,
-    DB_PORT,
-    DB_USER,
-    DB_PASSWORD
-)
+from settings import DB_HOST, DB_NAME, DB_PORT, DB_USER, DB_PASSWORD
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -21,7 +15,7 @@ host = DB_HOST
 database = DB_NAME
 config.set_main_option(
     "sqlalchemy.url",
-    f"postgresql+psycopg2cffi://{user}:{password}@{host}:{port}/{database}"
+    f"postgresql+psycopg2cffi://{user}:{password}@{host}:{port}/{database}",
 )
 
 # Interpret the config file for Python logging.
@@ -77,9 +71,7 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()
