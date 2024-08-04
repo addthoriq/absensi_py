@@ -30,4 +30,4 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.drop_column("kehadiran")
+    op.drop_table("kehadiran")
