@@ -4,7 +4,7 @@ from fastapi.responses import Response, JSONResponse
 
 class Ok:
     def __init__(self, data: Optional[Any]) -> None:
-        if data != None:
+        if data is not None:
             self.data = data
         else:
             self.data = ""
@@ -18,7 +18,7 @@ class Ok:
 
 class Created:
     def __init__(self, data: Optional[Any]) -> None:
-        if data != None:
+        if data is not None:
             self.data = data
         else:
             self.data = ""
@@ -43,7 +43,7 @@ class Unauthorized:
         self.custom_response = custom_response
 
     def json(self) -> JSONResponse:
-        if self.custom_response == None:
+        if self.custom_response is None:
             return JSONResponse(content={"message": "Unauthorized"}, status_code=401)
         return JSONResponse(self.custom_response, status_code=401)
 
@@ -62,7 +62,7 @@ class BadRequest:
         status_code: 400
         """
         self.custom_response = None
-        if custom_response == None:
+        if custom_response is None:
             self.message = message
         else:
             self.custom_response = custom_response
@@ -71,7 +71,7 @@ class BadRequest:
         """
         Parse class to JSONResponse
         """
-        if self.custom_response == None:
+        if self.custom_response is None:
             return JSONResponse(content={"message": self.message}, status_code=400)
         else:
             return JSONResponse(content=self.custom_response, status_code=400)
@@ -89,7 +89,7 @@ class Forbidden:
         status_code: 400
         """
         self.custom_response = None
-        if custom_response == None:
+        if custom_response is None:
             self.message = "You don't have permission to perform this action!"
         else:
             self.custom_response = custom_response
@@ -98,7 +98,7 @@ class Forbidden:
         """
         Parse class to JSONResponse
         """
-        if self.custom_response == None:
+        if self.custom_response is None:
             return JSONResponse(content={"message": self.message}, status_code=403)
         else:
             return JSONResponse(content=self.custom_response, status_code=403)
@@ -117,7 +117,7 @@ class NotFound:
         status_code: 404
         """
         self.custom_response = None
-        if custom_response != None:
+        if custom_response is not None:
             self.custom_response = custom_response
         else:
             self.message = message
@@ -126,7 +126,7 @@ class NotFound:
         """
         Parse class to JSONResponse
         """
-        if self.custom_response == None:
+        if self.custom_response is None:
             return JSONResponse(content={"message": self.message}, status_code=404)
         else:
             return JSONResponse(content=self.custom_response, status_code=404)
@@ -146,7 +146,7 @@ class InternalServerError:
         status_code: 500
         """
         self.custom_response = None
-        if custom_response != None:
+        if custom_response is not None:
             self.custom_response = custom_response
         else:
             self.error = error
@@ -155,7 +155,7 @@ class InternalServerError:
         """
         Parse Class to JSONResponse
         """
-        if self.custom_response == None:
+        if self.custom_response is None:
             return JSONResponse(content={"error": self.error}, status_code=500)
         else:
             return JSONResponse(content=self.custom_response, status_code=500)
