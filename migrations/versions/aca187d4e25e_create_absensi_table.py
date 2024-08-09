@@ -27,6 +27,7 @@ def upgrade() -> None:
         sa.Column("jam_absen_masuk", sa.Time()),
         sa.Column("jam_absen_keluar", sa.Time()),
         sa.Column("keterangan", sa.String(length=100)),
+        sa.Column("lokasi", sa.String()),
         sa.Column("user_id", sa.Integer()),
         sa.Column("shift_id", sa.Integer()),
         sa.Column("kehadiran_id", sa.Integer()),

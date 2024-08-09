@@ -17,6 +17,7 @@ class Absensi(Base):
     jam_masuk = Column("jam_absen_masuk", Time)
     jam_keluar = Column("jam_absen_keluar", Time)
     keterangan = Column("keterangan", String(100))
+    lokasi = Column("lokasi", String())
     user_id = Column("user_id", ForeignKey("user.id"))
     shift_id = Column("shift_id", ForeignKey("shift.id"))
     kehadiran_id = Column("kehadiran_id", ForeignKey("kehadiran.id"))
