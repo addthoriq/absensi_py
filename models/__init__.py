@@ -1,5 +1,5 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, scoped_session, declarative_base
+from sqlalchemy import create_engine, select, text
+from sqlalchemy.orm import sessionmaker, scoped_session, declarative_base, Session as SqlalchemySession
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from settings import DB_PORT, DB_HOST, DB_USER, DB_NAME, DB_PASSWORD
 
@@ -50,3 +50,24 @@ from .Role import Role #NoQA
 from .Shift import Shift #NoQA
 from .Kehadiran import Kehadiran #NoQA
 from .Absensi import Absensi #NoQA
+
+def clear_all_data_on_database(db: SqlalchemySession):
+    stmt = select(Absensi)
+    all_data = db.execute(stmt).scalars().all()
+    for val in all_data:
+        db.delete(val)
+    stmt = select(Kehadiran)
+    all_data = db.execute(stmt).scalars().all()
+    for val in all_data:
+        db.delete(val)
+    stmt = select(Shift)
+    all_data = db.execute(stmt).scalars().all()
+    for val in all_data:
+        db.delete(val)
+    stmt = select(Role)
+    all_data = db.execute(stmt).scalars().all()
+    for val in all_data:
+        db.delete(val)
+    db.commit()
+    db.execute(text("DELETE FROM public.user"))
+    db.commit()

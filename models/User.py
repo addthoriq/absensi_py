@@ -11,6 +11,7 @@ class User(Base):
     nama = Column("nama", String(50), nullable=False)
     password = Column("password", String(255), nullable=False)
     role_id = Column("role_id", ForeignKey("role.id"))
-    user_role = relationship(
-        "UserRole", backref="user_role_id", foreign_keys=[role_id]
+
+    userRole = relationship(
+        "Role", backref="user_role", foreign_keys=[role_id]
 	)

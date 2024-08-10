@@ -24,19 +24,19 @@ class Absensi(Base):
 
     # Relation
     absen_user = relationship(
-        "AbsenUser",
-        backref="absen_user_id",
+        "User",
+        backref="absen_user",
         foreign_keys=[user_id]
     )
 
     absen_shift = relationship(
-        "AbsenShift",
-        backref="absen_shift_id",
+        "Shift",
+        backref="absen_shift",
         foreign_keys=[shift_id]
     )
 
     absen_kehadiran = relationship(
-        "AbsenKehadiran",
-        backref="absen_kehadiran_id",
+        "Kehadiran",
+        backref="absen_kehadiran",
         foreign_keys=[kehadiran_id]
     )

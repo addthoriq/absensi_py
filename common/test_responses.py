@@ -1,5 +1,5 @@
 from unittest import TestCase
-from common.response_services import (
+from common.responses import (
     Ok,
     Created,
     NoContent,
