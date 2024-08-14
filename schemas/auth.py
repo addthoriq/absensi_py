@@ -15,11 +15,11 @@ class LoginSuccessResponse(BaseModel):
 class MeSuccessResponse(BaseModel):
     class Detail(BaseModel):
         id: str
-        name: str
+        nama_jabatan: str
 
     id: str
     email: str
-    name: str
+    nama: str
     jabatan: list[Detail]
 
 

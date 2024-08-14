@@ -51,7 +51,7 @@ async def login (
     db: Session = Depends(get_db_sync)
 ):
     try:
-        is_valid = auth_repo.check_user_password(db=db, user=req.email, password=req.password)
+        is_valid = auth_repo.check_user_password(db=db, email=req.email, password=req.password)
         if not is_valid:
             return common_response(BadRequest(message=MSG_NotValidUser))
         user = auth_repo.get_user_by_email(db=db, email=req.email)
@@ -89,6 +89,41 @@ async def generate_token(
             "token_type": "Bearer"
         }
 
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return common_response(InternalServerError(error=str(e)))
+    
+@router.get(
+    "/me",
+    responses={
+        "200": {"model": MeSuccessResponse},
+        "400": {"model": BadRequestResponse},
+        "401": {"model": UnauthorizedResponse},
+        "500": {"model": InternalServerErrorResponse}
+    }
+)
+async def me(
+    db: Session = Depends(get_db_sync),
+    token: str = Depends(oauth2_scheme)
+):
+    try:
+        user = get_user_from_jwt_token(db, token)
+        if user is None:
+            return common_response(Unauthorized())
+        return common_response(
+            Ok(
+                data={
+                    "id": user.id,
+                    "email": user.email,
+                    "nama": user.nama,
+                    "jabatan": {
+                        "id": user.userRole.id,
+                        "nama_jabatan": user.userRole.jabatan 
+                    }
+                }
+            )
+        )
     except Exception as e:
         import traceback
         traceback.print_exc()
