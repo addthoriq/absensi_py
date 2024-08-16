@@ -13,14 +13,14 @@ class LoginSuccessResponse(BaseModel):
 
 
 class MeSuccessResponse(BaseModel):
-    class Detail(BaseModel):
+    class Jabatan(BaseModel):
         id: str
         nama_jabatan: str
 
     id: str
     email: str
     nama: str
-    jabatan: list[Detail]
+    jabatan: Jabatan
 
 
 class LogoutSuccessResponse(BaseModel):

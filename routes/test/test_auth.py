@@ -9,6 +9,7 @@ from common.security import (
 )
 from models import factory_session, clear_all_data_on_database
 from migrations.factories.UserFactory import UserFactory
+from migrations.factories.RoleFactory import RoleFactory
 from repository import auth as auth_repo
 from main import app
 
@@ -25,7 +26,7 @@ class TestAuth(IsolatedAsyncioTestCase):
         _ = UserFactory.create(
             email="test@example.com",
             nama="test",
-            password=generate_hash_password("testpassword"),
+            password=generate_hash_password("12qwaszx"),
         )
         self.db.commit()
         client = TestClient(app)
@@ -33,7 +34,7 @@ class TestAuth(IsolatedAsyncioTestCase):
         # When
         response = client.post(
             "/auth/login",
-            json={"email": "test@example.com", "password": "testpassword"},
+            json={"email": "test@example.com", "password": "12qwaszx"},
         )
 
         # Expect
@@ -41,13 +42,35 @@ class TestAuth(IsolatedAsyncioTestCase):
         
     async def test_me(self) -> None:
         # Given
-        user = UserFactory.create(
-            email="test@example.com"
+        role = RoleFactory.create(
+            jabatan="Admin"
         )
+        user = UserFactory.create(
+            email="test@example.com",
+            nama="test",
+            password=generate_hash_password("12qwaszx"),
+            userRole=role
+        )
+        self.db.commit()
+        token = await generate_jwt_token_from_user(user)
+        client = TestClient(app)
 
         # When
+        response = client.get("/auth/me", headers={"Authorization": f"Bearer {token}"})
 
         # Expect
+        self.assertEqual(response.status_code, 200)
+        output = {
+            "id": user.id,
+            "nama": user.nama,
+            "email": user.email,
+            "jabatan": {
+                "id": role.id,
+                "nama_jabatan": role.jabatan
+            }
+        }
+        self.maxDiff = None
+        self.assertEqual(response.json(), output)
     
     def tearDown(self) -> None:
         self.db.rollback()

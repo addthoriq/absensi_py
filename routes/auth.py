@@ -7,8 +7,6 @@ from common.responses import (
     InternalServerError,
     Ok,
     Unauthorized,
-    NoContent,
-    NotFound
 )
 from common.security import (
     generate_jwt_token_from_user,
@@ -19,19 +17,12 @@ from models import get_db_sync
 from schemas.common import (
     UnauthorizedResponse,
     BadRequestResponse,
-    ForbiddenResponse,
-    NoContentResponse,
-    NotFoundResponse,
     InternalServerErrorResponse
 )
 from schemas.auth import (
     LoginRequest,
     LoginSuccessResponse,
-    LogoutSuccessResponse,
     MeSuccessResponse,
-    RefreshTokenSuccessResponse,
-    RevokeTokenRequest,
-    ChangePasswordRequest,
 )
 from repository import auth as auth_repo
 
