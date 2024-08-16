@@ -2,6 +2,7 @@ from models import factory_session
 from seeders.users import initial_user
 from seeders.roles import initial_role
 
+
 def initial_seeders():
     with factory_session() as session:
         print("Seeder Role")

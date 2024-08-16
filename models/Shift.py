@@ -1,6 +1,7 @@
 from . import Base
 from sqlalchemy import Column, Integer, VARCHAR, Time
 
+
 class Shift(Base):
     __tablename__ = "shift"
 

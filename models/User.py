@@ -12,6 +12,4 @@ class User(Base):
     password = Column("password", String(255), nullable=False)
     role_id = Column("role_id", ForeignKey("role.id"))
 
-    userRole = relationship(
-        "Role", backref="user_role", foreign_keys=[role_id]
-	)
+    userRole = relationship("Role", backref="user_role", foreign_keys=[role_id])

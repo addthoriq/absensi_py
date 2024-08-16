@@ -10,6 +10,7 @@ from common.security import (
 )
 from migrations.factories.UserFactory import UserFactory
 
+
 class TestSecurity(IsolatedAsyncioTestCase):
     def setUp(self) -> None:
         alembic_args = ["upgrade", "head"]
@@ -17,7 +18,7 @@ class TestSecurity(IsolatedAsyncioTestCase):
         self.db: Session = factory_session()
         clear_all_data_on_database(db=self.db)
         return super().setUp()
-    
+
     async def test_hash_password(self):
         # Given
         password = "abc123!"
@@ -26,13 +27,11 @@ class TestSecurity(IsolatedAsyncioTestCase):
         result = validated_user_password(hash=hash, password=password)
         # Expect
         self.assertTrue(result)
-    
+
     async def test_jwt_token(self):
         # Given
         user = UserFactory.create(
-            email="test@example.com",
-            nama="test",
-            password="12qwaszx"
+            email="test@example.com", nama="test", password="12qwaszx"
         )
         self.db.commit()
 
@@ -45,7 +44,7 @@ class TestSecurity(IsolatedAsyncioTestCase):
         self.assertEqual(user.id, token_user.id)
         self.assertEqual(user.email, token_user.email)
         self.assertEqual(user.nama, token_user.nama)
-    
+
     def tearDown(self) -> None:
         self.db.rollback()
         factory_session.remove()

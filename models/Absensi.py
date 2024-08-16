@@ -1,17 +1,11 @@
 from . import Base
-from sqlalchemy import (
-    Column, 
-    Integer,
-    DateTime, 
-    Time, 
-    ForeignKey, 
-    String
-)
+from sqlalchemy import Column, Integer, DateTime, Time, ForeignKey, String
 from sqlalchemy.orm import relationship
+
 
 class Absensi(Base):
     __tablename__ = "absensi"
-    
+
     id = Column("id", Integer, nullable=False, autoincrement=True, primary_key=True)
     tanggal_absen = Column("tanggal_absen", DateTime)
     jam_masuk = Column("jam_absen_masuk", Time)
@@ -23,20 +17,10 @@ class Absensi(Base):
     kehadiran_id = Column("kehadiran_id", ForeignKey("kehadiran.id"))
 
     # Relation
-    absen_user = relationship(
-        "User",
-        backref="absen_user",
-        foreign_keys=[user_id]
-    )
+    absen_user = relationship("User", backref="absen_user", foreign_keys=[user_id])
 
-    absen_shift = relationship(
-        "Shift",
-        backref="absen_shift",
-        foreign_keys=[shift_id]
-    )
+    absen_shift = relationship("Shift", backref="absen_shift", foreign_keys=[shift_id])
 
     absen_kehadiran = relationship(
-        "Kehadiran",
-        backref="absen_kehadiran",
-        foreign_keys=[kehadiran_id]
+        "Kehadiran", backref="absen_kehadiran", foreign_keys=[kehadiran_id]
     )

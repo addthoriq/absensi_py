@@ -5,13 +5,12 @@ from sqlalchemy.orm import Session
 from common.security import (
     generate_jwt_token_from_user,
     generate_hash_password,
-    validated_user_password
 )
 from models import factory_session, clear_all_data_on_database
 from migrations.factories.UserFactory import UserFactory
 from migrations.factories.RoleFactory import RoleFactory
-from repository import auth as auth_repo
 from main import app
+
 
 class TestAuth(IsolatedAsyncioTestCase):
     def setUp(self) -> None:
@@ -39,17 +38,15 @@ class TestAuth(IsolatedAsyncioTestCase):
 
         # Expect
         self.assertEqual(response.status_code, 200)
-        
+
     async def test_me(self) -> None:
         # Given
-        role = RoleFactory.create(
-            jabatan="Admin"
-        )
+        role = RoleFactory.create(jabatan="Admin")
         user = UserFactory.create(
             email="test@example.com",
             nama="test",
             password=generate_hash_password("12qwaszx"),
-            userRole=role
+            userRole=role,
         )
         self.db.commit()
         token = await generate_jwt_token_from_user(user)
@@ -64,14 +61,11 @@ class TestAuth(IsolatedAsyncioTestCase):
             "id": user.id,
             "nama": user.nama,
             "email": user.email,
-            "jabatan": {
-                "id": role.id,
-                "nama_jabatan": role.jabatan
-            }
+            "jabatan": {"id": role.id, "nama_jabatan": role.jabatan},
         }
         self.maxDiff = None
         self.assertEqual(response.json(), output)
-    
+
     def tearDown(self) -> None:
         self.db.rollback()
         factory_session.remove()

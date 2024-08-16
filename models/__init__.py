@@ -1,5 +1,10 @@
 from sqlalchemy import create_engine, select, text
-from sqlalchemy.orm import sessionmaker, scoped_session, declarative_base, Session as SqlalchemySession
+from sqlalchemy.orm import (
+    sessionmaker,
+    scoped_session,
+    declarative_base,
+    Session as SqlalchemySession,
+)
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from settings import DB_PORT, DB_HOST, DB_USER, DB_NAME, DB_PASSWORD
 
@@ -45,11 +50,12 @@ Async_Session = sessionmaker(async_engine, class_=AsyncSession)
 Base = declarative_base()
 
 # for alembic automigrations
-from .User import User #NoQA
-from .Role import Role #NoQA
-from .Shift import Shift #NoQA
-from .Kehadiran import Kehadiran #NoQA
-from .Absensi import Absensi #NoQA
+from .User import User  # NoQA
+from .Role import Role  # NoQA
+from .Shift import Shift  # NoQA
+from .Kehadiran import Kehadiran  # NoQA
+from .Absensi import Absensi  # NoQA
+
 
 def clear_all_data_on_database(db: SqlalchemySession):
     stmt = select(Absensi)
