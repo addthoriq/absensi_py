@@ -5,7 +5,7 @@ from models.User import User
 
 
 class PaginateUserResponse(BaseModel):
-    counts: int
+    count: int
     page_count: int
     page_size: int
     page: int
@@ -21,7 +21,7 @@ class PaginateUserResponse(BaseModel):
 
         jabatan: Optional[DetailJabatan]
 
-    result: List[DetailUserResponse]
+    results: List[DetailUserResponse]
 
 
 class DetailUserResponse(BaseModel):
