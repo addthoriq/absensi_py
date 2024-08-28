@@ -9,7 +9,7 @@ from schemas.user import (
     CreateUserResponse,
     UpdateUserRequest,
     UpdateUserResponse,
-    DetailUserResponse
+    DetailUserResponse,
 )
 from schemas.common import (
     BadRequestResponse,
@@ -17,23 +17,22 @@ from schemas.common import (
     NotFoundResponse,
     ForbiddenResponse,
     NoContentResponse,
-    InternalServerErrorResponse
+    InternalServerErrorResponse,
 )
 from common.responses import (
     common_response,
-    BadRequest,
     InternalServerError,
     Unauthorized,
-    Forbidden,
     NotFound,
     NoContent,
     Created,
-    Ok
+    Ok,
 )
 from repository import user as user_repo
 
 router = APIRouter(prefix="/user-management", tags=["User Management"])
-MSG_UNAUTHORIZED="Invalid/Expired Credentials"
+MSG_UNAUTHORIZED = "Invalid/Expired Credentials"
+
 
 @router.get(
     "/",
@@ -42,17 +41,17 @@ MSG_UNAUTHORIZED="Invalid/Expired Credentials"
         "400": {"model": BadRequestResponse},
         "401": {"model": UnauthorizedResponse},
         "403": {"model": ForbiddenResponse},
-        "500": {"model": InternalServerErrorResponse}
-    }
+        "500": {"model": InternalServerErrorResponse},
+    },
 )
 async def get_paginate_user(
     db: Session = Depends(get_db_sync),
     token: str = Depends(oauth2_scheme),
     page: int = 1,
     page_size: int = 10,
-    nama: Optional[str] = None,
+    nama_user: Optional[str] = None,
     email: Optional[str] = None,
-    jabatan: Optional[int] = None
+    jabatan: Optional[int] = None,
 ):
     try:
         user = get_user_from_jwt_token(db, token)
@@ -62,9 +61,9 @@ async def get_paginate_user(
             db=db,
             page=page,
             page_size=page_size,
-            nama=nama,
+            nama=nama_user,
             email=email,
-            jabatan=jabatan
+            jabatan=jabatan,
         )
         return common_response(
             Ok(
@@ -80,19 +79,22 @@ async def get_paginate_user(
                             "nama_user": val.nama,
                             "jabatan": {
                                 "id": val.userRole.id,
-                                "nama_jabatan": val.userRole.jabatan
+                                "nama_jabatan": val.userRole.jabatan,
                             }
-                            if val.userRole else None
+                            if val.userRole
+                            else None,
                         }
                         for val in data
-                    ]
+                    ],
                 }
             )
         )
     except Exception as e:
         import traceback
+
         traceback.print_exc()
         return common_response(InternalServerError(error=str(e)))
+
 
 @router.get(
     "/{id}/",
@@ -102,13 +104,11 @@ async def get_paginate_user(
         "401": {"model": UnauthorizedResponse},
         "403": {"model": ForbiddenResponse},
         "404": {"model": NotFoundResponse},
-        "500": {"model": InternalServerErrorResponse}
-    }
+        "500": {"model": InternalServerErrorResponse},
+    },
 )
 async def get_detail_user(
-    id: int,
-    db: Session = Depends(get_db_sync),
-    token: str = Depends(oauth2_scheme)
+    id: int, db: Session = Depends(get_db_sync), token: str = Depends(oauth2_scheme)
 ):
     try:
         user = get_user_from_jwt_token(db, token)
@@ -125,15 +125,17 @@ async def get_detail_user(
                     "nama_user": data.nama,
                     "jabatan": {
                         "id": data.userRole.id,
-                        "nama_jabatan": data.userRole.jabatan
-                    }
+                        "nama_jabatan": data.userRole.jabatan,
+                    },
                 }
             )
         )
     except Exception as e:
         import traceback
+
         traceback.print_exc()
         return common_response(InternalServerError(error=str(e)))
+
 
 @router.post(
     "/",
@@ -142,13 +144,13 @@ async def get_detail_user(
         "400": {"model": BadRequestResponse},
         "401": {"model": UnauthorizedResponse},
         "403": {"model": ForbiddenResponse},
-        "500": {"model": InternalServerErrorResponse}
-    }
+        "500": {"model": InternalServerErrorResponse},
+    },
 )
 async def create_user(
     req: CreateUserRequest,
     db: Session = Depends(get_db_sync),
-    token: str = Depends(oauth2_scheme)
+    token: str = Depends(oauth2_scheme),
 ):
     try:
         user = get_user_from_jwt_token(db, token)
@@ -159,7 +161,7 @@ async def create_user(
             nama=req.nama_user,
             email=req.email,
             password=req.password,
-            jabatan=req.jabatan
+            jabatan=req.jabatan,
         )
         return common_response(
             Created(
@@ -169,15 +171,17 @@ async def create_user(
                     "email": data.email,
                     "jabatan": {
                         "id": data.userRole.id,
-                        "nama_jabatan": data.userRole.jabatan
-                    }
+                        "nama_jabatan": data.userRole.jabatan,
+                    },
                 }
             )
         )
     except Exception as e:
         import traceback
+
         traceback.print_exc()
         return common_response(InternalServerError(error=str(e)))
+
 
 @router.put(
     "/{id}/",
@@ -187,14 +191,14 @@ async def create_user(
         "401": {"model": UnauthorizedResponse},
         "403": {"model": ForbiddenResponse},
         "404": {"model": NotFoundResponse},
-        "500": {"model": InternalServerErrorResponse}
-    }
+        "500": {"model": InternalServerErrorResponse},
+    },
 )
 async def update_user(
     id: int,
     req: UpdateUserRequest,
     db: Session = Depends(get_db_sync),
-    token: str = Depends(oauth2_scheme)
+    token: str = Depends(oauth2_scheme),
 ):
     try:
         user = get_user_from_jwt_token(db, token)
@@ -218,15 +222,17 @@ async def update_user(
                     "email": data.email,
                     "jabatan": {
                         "id": data.userRole.id,
-                        "nama_jabatan": data.userRole.jabatan
-                    }
+                        "nama_jabatan": data.userRole.jabatan,
+                    },
                 }
             )
         )
     except Exception as e:
         import traceback
+
         traceback.print_exc()
         return common_response(InternalServerError(error=str(e)))
+
 
 @router.delete(
     "/{id}/",
@@ -236,13 +242,11 @@ async def update_user(
         "401": {"model": UnauthorizedResponse},
         "403": {"model": ForbiddenResponse},
         "404": {"model": NotFoundResponse},
-        "500": {"model": InternalServerErrorResponse}
-    }
+        "500": {"model": InternalServerErrorResponse},
+    },
 )
 async def delete_user(
-    id: int,
-    db: Session = Depends(get_db_sync),
-    token: str = Depends(oauth2_scheme)
+    id: int, db: Session = Depends(get_db_sync), token: str = Depends(oauth2_scheme)
 ):
     try:
         user = get_user_from_jwt_token(db, token)
@@ -252,11 +256,10 @@ async def delete_user(
         if check_data is None:
             return common_response(NotFound())
         user_repo.delete_user(db, id)
-        return common_response(
-            NoContent()
-        )
+        return common_response(NoContent())
 
     except Exception as e:
         import traceback
+
         traceback.print_exc()
         return common_response(InternalServerError(error=str(e)))

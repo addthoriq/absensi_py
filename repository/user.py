@@ -6,13 +6,14 @@ from typing import List, Optional, Tuple
 from math import ceil
 from common.security import generate_hash_password
 
+
 def list_users(
     db: Session,
     page: int = 1,
-    page_size: int =10,
+    page_size: int = 10,
     nama: Optional[str] = None,
     email: Optional[str] = None,
-    jabatan: Optional[int] = None
+    jabatan: Optional[int] = None,
 ) -> Tuple[List[User], int, int]:
     limit = page_size
     offset = (page - 1) * limit
@@ -27,20 +28,17 @@ def list_users(
     if jabatan is not None:
         stmt = stmt.filter(User.role_id == jabatan)
         stmt_count = stmt_count.filter(User.role_id == jabatan)
-    stmt = (
-        stmt.order_by(User.id.desc()).limit(limit=limit).offset(offset=offset)
-    )
+    stmt = stmt.order_by(User.id.asc()).limit(limit=limit).offset(offset=offset)
     get_list = db.execute(stmt).scalars().all()
     num_data = db.execute(stmt_count).scalar()
     num_page = ceil(num_data / limit)
     return get_list, num_data, num_page
 
-def get_user_by_id(
-    db: Session,
-    id: int
-) -> User:
+
+def get_user_by_id(db: Session, id: int) -> User:
     query = select(User).filter(User.id == id).join(Role, User.role_id == Role.id)
     return db.execute(query).scalar()
+
 
 def create_user(
     db: Session,
@@ -48,26 +46,22 @@ def create_user(
     email: str,
     password: str,
     jabatan: int,
-    is_commit: bool = True
+    is_commit: bool = True,
 ) -> User:
     new_user = User(
         nama=nama,
         email=email,
         password=generate_hash_password(password),
-        role_id=jabatan
+        role_id=jabatan,
     )
     db.add(new_user)
     if is_commit:
         db.commit()
     return new_user
 
+
 def update_user(
-    db: Session,
-    id: int,
-    nama: str,
-    email: str,
-    jabatan: int,
-    is_commit: bool = True
+    db: Session, id: int, nama: str, email: str, jabatan: int, is_commit: bool = True
 ) -> User:
     query = select(User).filter(User.id == id)
     data = db.execute(query).scalar()
@@ -79,11 +73,8 @@ def update_user(
         db.commit()
     return data
 
-def delete_user(
-    db: Session,
-    id: int,
-    is_commit: bool = True
-) -> None:
+
+def delete_user(db: Session, id: int, is_commit: bool = True) -> None:
     query = db.query(User).filter(User.id == id).first()
     db.delete(query)
     if is_commit:

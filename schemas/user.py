@@ -40,7 +40,7 @@ class CreateUserRequest(BaseModel):
     nama_user: Annotated[str, StringConstraints(min_length=1, max_length=50)]
     email: Annotated[str, StringConstraints(min_length=1, max_length=30)]
     password: Annotated[str, StringConstraints(min_length=1, max_length=50)]
-    jabatan: list[int]
+    jabatan: int
 
     @field_validator("email")
     def validate_email_unique(cls, email):
@@ -66,7 +66,7 @@ class CreateUserResponse(BaseModel):
 class UpdateUserRequest(BaseModel):
     nama_user: str
     email: str
-    jabatan: list[int]
+    jabatan: int
 
 
 class UpdateUserValidation(BaseModel):
