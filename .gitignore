@@ -3,4 +3,4 @@
 docker-compose.yaml
 .venv/
 .idea/
-.*_chace/
+.**_cache/
