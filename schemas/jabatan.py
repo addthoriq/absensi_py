@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 
 class PaginateRoleResponse(BaseModel):
-    counts: int
+    count: int
     page_count: int
     page_size: int
     page: int
