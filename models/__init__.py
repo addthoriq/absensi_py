@@ -6,9 +6,13 @@ from sqlalchemy.orm import (
     Session as SqlalchemySession,
 )
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from settings import DB_PORT, DB_HOST, DB_USER, DB_NAME, DB_PASSWORD
+from settings import (
+    DB_ENGINE,
+    DB_PORT, DB_HOST, DB_USER, DB_NAME, DB_PASSWORD
+)
 
 # Create SQLAlchemySession
+engine = DB_ENGINE
 user = DB_USER
 password = DB_PASSWORD
 host = DB_HOST
@@ -18,8 +22,9 @@ database = DB_NAME
 # To use session for query, insert, update and delete see:
 # https://docs.sqlalchemy.org/en/14/orm/session_basics.html#using-a-sessionmaker
 # Create sync session
+
 engine = create_engine(
-    f"postgresql+psycopg2cffi://{user}:{password}@{host}:{port}/{database}",
+    f"{engine}://{user}:{password}@{host}:{port}/{database}",
     pool_size=100,
     max_overflow=0,
     pool_timeout=300,
