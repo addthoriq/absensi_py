@@ -1,12 +1,14 @@
 from unittest import IsolatedAsyncioTestCase
 from sqlalchemy.orm import Session
 from fastapi.testclient import TestClient
+from datetime import datetime
 from main import app
 from common.security import generate_jwt_token_from_user, generate_hash_password
 import alembic.config
 from models import factory_session, clear_all_data_on_database
 from migrations.factories.UserFactory import UserFactory
 from repository import shift as shift_repo
+from models.Shift import Shift
 
 class TestShift(IsolatedAsyncioTestCase):
     def setUp(self) -> None:
@@ -222,6 +224,202 @@ class TestShift(IsolatedAsyncioTestCase):
         }
         self.maxDiff = None
         self.assertEqual(output, response.json())
+
+    async def test_detail_shift(self):
+        user = UserFactory.create(
+            nama="Admin",
+            email="admin@example.com",
+            password=generate_hash_password("12qwaszx")
+        )
+        data = shift_repo.create(
+            db=self.db,
+            nama_shift="Shift Pagi",
+            jam_mulai="07:00:00",
+            jam_akhir="12:00:00",
+            is_commit=False
+        )
+        self.db.commit()
+        token = await generate_jwt_token_from_user(user=user)
+        client = TestClient(app)
+        
+        # When
+        response = client.get(
+            f"/shift/{data.id}",
+            headers={"Authorization": f"Bearer {token}"},
+        )
+        
+        # Expect
+        self.assertEqual(response.status_code, 200)
+        output = {
+            "id": data.id,
+            "nama_shift": data.nama_shift,
+            "jam_mulai": str(data.jam_mulai),
+            "jam_akhir": str(data.jam_akhir)
+        }
+        self.maxDiff = None
+        self.assertEqual(output, response.json())
+
+    async def test_detail_shift_not_found(self):
+        user = UserFactory.create(
+            nama="Admin",
+            email="admin@example.com",
+            password=generate_hash_password("12qwaszx")
+        )
+        self.db.commit()
+        token = await generate_jwt_token_from_user(user=user)
+        client = TestClient(app)
+        
+        # When
+        response = client.get(
+            "/shift/091212",
+            headers={"Authorization": f"Bearer {token}"},
+        )
+        
+        # Expect
+        self.assertEqual(response.status_code, 404)
+
+    async def test_create_shift(self):
+        user = UserFactory.create(
+            nama="Admin",
+            email="admin@example.com",
+            password=generate_hash_password("12qwaszx")
+        )
+        self.db.commit()
+        token = await generate_jwt_token_from_user(user=user)
+        client = TestClient(app)
+        data = {
+            "nama_shift": "Shift Pagi",
+            "jam_mulai": "07:00:00",
+            "jam_akhir": "12:00:00"
+        }
+        
+        # When
+        response = client.post(
+            "/shift",
+            headers={"Authorization": f"Bearer {token}"},
+            json=data
+        )
+        
+        # Expect
+        self.assertEqual(response.status_code, 201)
+        output = {
+            "id": response.json()["id"],
+            "nama_shift": data["nama_shift"],
+            "jam_mulai": str(data["jam_mulai"]),
+            "jam_akhir": str(data["jam_akhir"])
+        }
+        self.maxDiff = None
+        self.assertEqual(output, response.json())
+        check_db = self.db.query(Shift).filter(
+            Shift.nama_shift == data["nama_shift"],
+            Shift.jam_mulai == datetime.strptime(data["jam_mulai"], "%H:%M:%S").time(),
+            Shift.jam_akhir == datetime.strptime(data["jam_akhir"], "%H:%M:%S").time(),
+        ).first()
+        self.assertIsNotNone(check_db)
+        
+        
+    async def test_update_shift(self):
+        user = UserFactory.create(
+            nama="Admin",
+            email="admin@example.com",
+            password=generate_hash_password("12qwaszx")
+        )
+        old = shift_repo.create(
+            db=self.db,
+            nama_shift="Shift Pagi",
+            jam_mulai="06:00:00",
+            jam_akhir="11:00:00",
+            is_commit=False
+        )
+        self.db.commit()
+        token = await generate_jwt_token_from_user(user=user)
+        client = TestClient(app)
+        data = {
+            "nama_shift": "Shift Pagi",
+            "jam_mulai": "07:00:00",
+            "jam_akhir": "12:00:00"
+        }
+        
+        # When
+        response = client.put(
+            f"/shift/{old.id}",
+            headers={"Authorization": f"Bearer {token}"},
+            json=data
+        )
+        
+        # Expect
+        self.assertEqual(response.status_code, 200)
+        output = {
+            "id": old.id,
+            "nama_shift": data["nama_shift"],
+            "jam_mulai": str(data["jam_mulai"]),
+            "jam_akhir": str(data["jam_akhir"])
+        }
+        self.maxDiff = None
+        self.assertEqual(output, response.json())
+        check_db = self.db.query(Shift).filter(
+            Shift.nama_shift == data["nama_shift"],
+            Shift.jam_mulai == datetime.strptime(data["jam_mulai"], "%H:%M:%S").time(),
+            Shift.jam_akhir == datetime.strptime(data["jam_akhir"], "%H:%M:%S").time(),
+        ).first()
+        self.assertIsNotNone(check_db)
+        
+        
+    async def test_update_shift_not_found(self):
+        user = UserFactory.create(
+            nama="Admin",
+            email="admin@example.com",
+            password=generate_hash_password("12qwaszx")
+        )
+        self.db.commit()
+        token = await generate_jwt_token_from_user(user=user)
+        client = TestClient(app)
+        data = {
+            "nama_shift": "Shift Pagi",
+            "jam_mulai": "07:00:00",
+            "jam_akhir": "12:00:00"
+        }
+
+        # When
+        response = client.put(
+            "/shift/091212",
+            headers={"Authorization": f"Bearer {token}"},
+            json=data
+        )
+        
+        # Expect
+        self.assertEqual(response.status_code, 404)
+
+    async def test_delete_shift(self):
+        user = UserFactory.create(
+            nama="Admin",
+            email="admin@example.com",
+            password=generate_hash_password("12qwaszx")
+        )
+        data = shift_repo.create(
+            db=self.db,
+            nama_shift="Shift Pagi",
+            jam_mulai="06:00:00",
+            jam_akhir="11:00:00",
+            is_commit=False
+        )
+        self.db.commit()
+        token = await generate_jwt_token_from_user(user=user)
+        client = TestClient(app)
+        
+        # When
+        response = client.delete(
+            f"/shift/{data.id}",
+            headers={"Authorization": f"Bearer {token}"},
+        )
+        
+        # Expect
+        self.assertEqual(response.status_code, 204)
+        check_db = self.db.query(Shift).filter(
+            Shift.id == data.id,
+            Shift.nama_shift == data.nama_shift,
+        ).first()
+        self.assertIsNone(check_db)
 
     def tearDown(self) -> None:
         self.db.rollback()

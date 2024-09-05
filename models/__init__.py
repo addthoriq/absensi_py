@@ -7,12 +7,10 @@ from sqlalchemy.orm import (
 )
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from settings import (
-    DB_ENGINE,
     DB_PORT, DB_HOST, DB_USER, DB_NAME, DB_PASSWORD
 )
 
 # Create SQLAlchemySession
-engine = DB_ENGINE
 user = DB_USER
 password = DB_PASSWORD
 host = DB_HOST
@@ -24,7 +22,7 @@ database = DB_NAME
 # Create sync session
 
 engine = create_engine(
-    f"{engine}://{user}:{password}@{host}:{port}/{database}",
+    f"postgresql+psycopg2cffi://{user}:{password}@{host}:{port}/{database}",
     pool_size=100,
     max_overflow=0,
     pool_timeout=300,
@@ -60,9 +58,14 @@ from .Role import Role  # NoQA
 from .Shift import Shift  # NoQA
 from .Kehadiran import Kehadiran  # NoQA
 from .Absensi import Absensi  # NoQA
+from .Shift import Shift # NOQA
 
 
 def clear_all_data_on_database(db: SqlalchemySession):
+    stmt = select(Shift)
+    all_data = db.execute(stmt).scalars().all()
+    for val in all_data:
+        db.delete(val)
     stmt = select(Absensi)
     all_data = db.execute(stmt).scalars().all()
     for val in all_data:

@@ -119,8 +119,8 @@ async def get_detail_shift(
                 data={
                     "id": data.id,
                     "nama_shift": data.nama_shift,
-                    "jam_mulai": data.jam_mulai,
-                    "jam_akhir": data.jam_akhir
+                    "jam_mulai": str(data.jam_mulai),
+                    "jam_akhir": str(data.jam_akhir)
                 }
             )
         )
@@ -159,8 +159,8 @@ async def create_shift(
                 data={
                     "id": data.id,
                     "nama_shift": data.nama_shift,
-                    "jam_mulai": datetime.strptime(data.jam_mulai, "%H:%M:%S").time(),
-                    "jam_akhir": datetime.strptime(data.jam_akhir, "%H:%M:%S").time(),
+                    "jam_mulai": str(data.jam_mulai),
+                    "jam_akhir": str(data.jam_akhir)
                 }
             )
         )
@@ -205,8 +205,8 @@ async def update_shift(
                 data={
                     "id": data.id,
                     "nama_shift": data.nama_shift,
-                    "jam_mulai": datetime.strptime(data.jam_mulai, "%H:%M:%S").time(),
-                    "jam_akhir": datetime.strptime(data.jam_akhir, "%H:%M:%S").time(),
+                    "jam_mulai": str(data.jam_mulai),
+                    "jam_akhir": str(data.jam_akhir),
                 }
             )
         )

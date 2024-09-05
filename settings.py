@@ -12,8 +12,6 @@ ENVIRONMENT = os.environ.get("ENVIRONMENT")
 ROOT_PATH = os.environ.get("ROOT_PATH", "")
 
 # Connect to PostgreSQL
-DB_DEPLOY = os.environ.get("DB_DEPLOY", "True")
-DB_ENGINE = os.environ.get("DB_ENGINE", "cockroachdb") if DB_DEPLOY == "True" else os.environ.get("DB_ENGINE", "postgresql+psycopg2cffi")
 DB_USER = os.environ.get("DB_USER")
 DB_PASSWORD = os.environ.get("DB_PASSWORD")
 DB_HOST = os.environ.get("DB_HOST")
