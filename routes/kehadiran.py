@@ -32,7 +32,7 @@ from schemas.kehadiran import (
     UpdateKehadiranResponse
 )
 
-router = APIRouter("/kehadiran", tags=["Kehadiran"])
+router = APIRouter(prefix="/kehadiran", tags=["Kehadiran"])
 MSG_UNAUTHORIZED = "Invalid/Expire credentials"
 
 @router.get(
@@ -65,7 +65,7 @@ async def get_paginate_list_kehadiran(
         return common_response(
             Ok(
                 data={
-                    "counts": num_data,
+                    "count": num_data,
                     "page_count": num_page,
                     "page_size": page_size,
                     "page": page,
