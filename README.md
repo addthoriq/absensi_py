@@ -2,7 +2,7 @@
 
 ## Requirements
 - Python 3.12
-- Poetry 0.1.0 (see https://python-poetry.org/docs/)
+- Poetry 1.8.3 (see https://python-poetry.org/docs/)
 - Postgres 16
 
 ## Installation (development)
