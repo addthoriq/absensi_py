@@ -23,7 +23,7 @@ def upgrade() -> None:
     op.create_table(
         "absensi",
         sa.Column("id", sa.Integer()),
-        sa.Column("tanggal_absen", sa.DATE()),
+        sa.Column("tanggal_absen", sa.Date()),
         sa.Column("jam_absen_masuk", sa.Time()),
         sa.Column("jam_absen_keluar", sa.Time()),
         sa.Column("keterangan", sa.String(length=100)),

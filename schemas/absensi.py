@@ -1,5 +1,6 @@
 from typing import List
 from pydantic import BaseModel
+from datetime import date, time
 
 
 class PaginateAbsensiResponse(BaseModel):
@@ -10,9 +11,9 @@ class PaginateAbsensiResponse(BaseModel):
 
     class DetailAbsensiResponse(BaseModel):
         id: int
-        tanggal_absen: str
-        jam_masuk: str
-        jam_keluar: str
+        tanggal_absen: date
+        jam_masuk: time
+        jam_keluar: time
         keterangan: str
         lokasi: str
 
@@ -45,7 +46,7 @@ class PaginateAbsensiResponse(BaseModel):
 
 class DetailAbsensiResponse(BaseModel):
     id: int
-    tanggal_absen: str
+    tanggal_absen: date
     jam_masuk: str
     jam_keluar: str
     keterangan: str

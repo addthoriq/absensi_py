@@ -1,5 +1,5 @@
 from . import Base
-from sqlalchemy import Column, Integer, DateTime, Time, ForeignKey, String
+from sqlalchemy import Column, Integer, Time, ForeignKey, String, Date
 from sqlalchemy.orm import relationship
 
 
@@ -7,7 +7,7 @@ class Absensi(Base):
     __tablename__ = "absensi"
 
     id = Column("id", Integer, nullable=False, autoincrement=True, primary_key=True)
-    tanggal_absen = Column("tanggal_absen", DateTime)
+    tanggal_absen = Column("tanggal_absen", Date)
     jam_masuk = Column("jam_absen_masuk", Time)
     jam_keluar = Column("jam_absen_keluar", Time)
     keterangan = Column("keterangan", String(100))
