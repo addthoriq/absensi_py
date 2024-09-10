@@ -51,6 +51,17 @@ def get_by_id(
     data = db.execute(query).scalar()
     return data
 
+def get_by_id_without_jam_keluar(
+    db: Session,
+    id: int
+) -> Absensi:
+    query = select(Absensi).filter(
+        Absensi.id == id,
+        Absensi.jam_keluar == None #NOQA
+    )
+    data = db.execute(query).scalar()
+    return data
+
 def create(
     db: Session,
     keterangan: str,
