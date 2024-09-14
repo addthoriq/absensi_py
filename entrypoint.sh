@@ -9,5 +9,5 @@ if [ ! -e /$CONTAINER_FIRST_STARTUP ]; then
 else
     # script that should run the rest of the times (instances where you 
     # stop/restart containers).
-    poetry run alembic upgrade head && poetry run python cli.py initial-data && poetry run uvicorn --host 0.0.0.0 --port 8000 main:app --reload
+    poetry run uvicorn --host 0.0.0.0 --port 8000 main:app --reload
 fi
