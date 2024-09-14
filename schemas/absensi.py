@@ -43,6 +43,8 @@ class PaginateAbsensiResponse(BaseModel):
         shift: List[GetShiftDetail]
         kehadiran: List[GetKehadiranDetail]
 
+    results: List[DetailAbsensiResponse]
+
 
 class DetailAbsensiResponse(BaseModel):
     id: int
