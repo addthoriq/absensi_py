@@ -67,8 +67,8 @@ def create(
     keterangan: str,
     lokasi: str,
     userId: User,
-    shiftId: Shift,
-    kehadiranId: Kehadiran,
+    shift_id: int,
+    kehadiran_id: int,
     is_commit: bool = True
 ) -> Absensi:
     new_data = Absensi(
@@ -76,9 +76,9 @@ def create(
         jam_masuk=datetime.today().strftime("%H:%M:%S"),
         keterangan=keterangan,
         lokasi=lokasi,
+        shift_id=shift_id,
         absen_user=userId,
-        absen_shift=shiftId,
-        absen_kehadiran=kehadiranId
+        kehadiran_id=kehadiran_id
     )
     db.add(new_data)
     if is_commit:
@@ -88,10 +88,12 @@ def create(
 def update_exit_time(
     db: Session,
     id: int,
+    userId: User,
     is_commit: bool = True
 ) -> Optional[Absensi]:
     query = select(Absensi).filter(
         Absensi.id == id, 
+        Absensi.absen_user == userId,
         Absensi.jam_keluar == None #NOQA
     )
     data = db.execute(query).scalar()
