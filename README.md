@@ -1,5 +1,8 @@
 # ABSENSI
 
+## Running on Live
+http://103.127.138.36:8000/docs
+
 ## Requirements
 - Python 3.12
 - Poetry 1.8.3 (see https://python-poetry.org/docs/)
