@@ -4,24 +4,5 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    depends_on:
-      - pgsql
-    links:
-      - pgsql
     ports:
       - "8000:8000"
-
-  pgsql:
-    image: postgres
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_PASSWORD=123
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=db_absensi
-      - POSTGRES_HOST_AUTH_METHOD=trust
-    volumes:
-      - pgsql_data:/var/lib/postgresql/data
-
-volumes:
-  pgsql_data:

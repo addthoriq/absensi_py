@@ -18,10 +18,11 @@ COPY . .
 
 RUN poetry install
 
-COPY entrypoint.sh ./
+# COPY entrypoint.sh ./
 
-RUN chmod +x entrypoint.sh
+# RUN chmod +x entrypoint.sh
+CMD ["poetry", "run", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 
 EXPOSE 8000
 
-ENTRYPOINT [ "./entrypoint.sh" ]
+# ENTRYPOINT [ "./entrypoint.sh" ]
